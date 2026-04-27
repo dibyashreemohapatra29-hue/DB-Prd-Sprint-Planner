@@ -30,21 +30,24 @@ export default function App() {
         </p>
       </header>
 
-      <main className="main-layout">
-        <section className="input-section">
-          <InputForm
-            formData={formData}
-            onChange={handleChange}
-            onSubmit={handleSubmit}
-          />
-        </section>
+      <div className="input-section">
+        <InputForm
+          formData={formData}
+          onChange={handleChange}
+          onSubmit={handleSubmit}
+        />
+      </div>
 
-        <section className="output-section">
-          <PRDSection />
-          <TaskTable />
-          <SprintBoard />
-        </section>
-      </main>
+      <div className="output-label">Output</div>
+
+      <div className="output-grid">
+        <PRDSection />
+        <SprintBoard />
+      </div>
+
+      <div className="output-full">
+        <TaskTable />
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 export default function TaskTable() {
   return (
-    <div className="card output-card">
+    <div className="card card-tasks">
       <h2 className="section-title">Tasks</h2>
       <div className="table-wrapper">
         <table className="task-table">
