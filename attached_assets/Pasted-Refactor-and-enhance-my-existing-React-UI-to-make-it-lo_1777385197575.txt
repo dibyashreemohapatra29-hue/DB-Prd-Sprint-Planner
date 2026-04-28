@@ -1,0 +1,97 @@
+Refactor and enhance my existing React UI to make it look like a modern SaaS dashboard.
+
+Do NOT rebuild from scratch. Modify the existing components and structure.
+
+------------------------------------
+GOAL:
+Transform the current basic UI into a professional, clean, modern SaaS dashboard.
+
+Theme:
+- Light theme
+- Desktop-first
+- Clean, minimal, product-like (similar to Notion / Linear dashboards)
+
+------------------------------------
+LAYOUT IMPROVEMENTS:
+
+1. Add a top navigation bar:
+- Left: “PRD → Sprint Planner”
+- Right: placeholder avatar or profile circle
+- Subtle shadow and fixed height
+
+2. Wrap the page in a centered container:
+- Max width ~1100px
+- Add proper padding and margins
+
+------------------------------------
+CARD SYSTEM:
+
+- Convert all sections into cards
+- Use:
+  - rounded corners
+  - soft shadows
+  - consistent padding
+- Add spacing between sections
+
+------------------------------------
+INPUT SECTION IMPROVEMENTS:
+
+- Convert input form into a clean card layout
+- Use grid (2 columns for desktop where possible)
+- Improve inputs:
+  - rounded borders
+  - focus states (highlight border)
+- Add labels above each input
+- Add helper text under inputs
+- Make “Generate Plan” a primary CTA button (styled)
+
+------------------------------------
+OUTPUT SECTION IMPROVEMENTS:
+
+A. PRD Section:
+- Break into subsections:
+  Problem, Goals, Personas, Use Cases, Metrics
+- Add spacing between sections
+- Use subtle headings and divider lines
+
+B. Task Table:
+- Improve table styling:
+  - header background
+  - row spacing
+  - hover effect
+- Align columns properly
+- Add better typography
+
+C. Sprint Plan:
+- Convert into 3-column layout:
+  Team A | Team B | Team C
+- Each column should look like a mini board (kanban style)
+- Add placeholder cards inside
+
+------------------------------------
+VISUAL POLISH:
+
+- Improve typography hierarchy:
+  - Page title
+  - Section titles
+  - Body text
+- Add consistent spacing system
+- Use subtle color palette (white, gray, light blue accent)
+- Add hover states for buttons
+- Improve alignment across all sections
+
+------------------------------------
+CODE CONSTRAINTS:
+
+- Do NOT add backend logic
+- Do NOT change functionality
+- Keep components modular
+- Reuse existing components where possible
+- Improve CSS or migrate to Tailwind if needed
+
+------------------------------------
+OUTPUT:
+
+- Updated React components
+- Updated styling (CSS or Tailwind)
+- Keep code clean and readable

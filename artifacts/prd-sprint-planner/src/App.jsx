@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Navbar from "./components/Navbar";
 import InputForm from "./components/InputForm";
 import PRDSection from "./components/PRDSection";
 import TaskTable from "./components/TaskTable";
@@ -18,36 +19,41 @@ export default function App() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit() {
-  }
+  function handleSubmit() {}
 
   return (
-    <div className="app-container">
-      <header className="app-header">
-        <h1 className="app-title">PRD to Sprint Planner</h1>
-        <p className="app-subtitle">
-          Turn your product ideas into structured plans and sprint-ready tasks
-        </p>
-      </header>
+    <div className="page-root">
+      <Navbar />
+      <main className="page-content">
+        <div className="page-container">
 
-      <div className="input-section">
-        <InputForm
-          formData={formData}
-          onChange={handleChange}
-          onSubmit={handleSubmit}
-        />
-      </div>
+          <section className="section-block">
+            <InputForm
+              formData={formData}
+              onChange={handleChange}
+              onSubmit={handleSubmit}
+            />
+          </section>
 
-      <div className="output-label">Output</div>
+          <div className="output-heading">
+            <span className="output-badge">Output</span>
+            <div className="output-divider" />
+          </div>
 
-      <div className="output-grid">
-        <PRDSection />
-        <SprintBoard />
-      </div>
+          <section className="section-block">
+            <PRDSection />
+          </section>
 
-      <div className="output-full">
-        <TaskTable />
-      </div>
+          <section className="section-block">
+            <TaskTable />
+          </section>
+
+          <section className="section-block">
+            <SprintBoard />
+          </section>
+
+        </div>
+      </main>
     </div>
   );
 }
