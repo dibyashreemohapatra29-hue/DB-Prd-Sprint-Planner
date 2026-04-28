@@ -5,6 +5,7 @@ import TaskTable from "./components/TaskTable";
 import SprintBoard from "./components/SprintBoard";
 import FullReport from "./components/FullReport";
 import HistoryPanel from "./components/HistoryPanel";
+import HistorySection from "./components/HistorySection";
 import "./App.css";
 
 export default function App() {
@@ -27,22 +28,24 @@ export default function App() {
     if (error) setError("");
   }
 
-  // Pre-fill form from a history record
+  // Pre-fill form from a history record (supports both local DB and Supabase field names)
   function handleReuse(record) {
     setFormData({
-      featureTitle:       record.featureTitle,
-      featureDescription: record.description,
-      targetUsers:        record.targetUsers  || "",
-      businessGoal:       record.businessGoal || "",
+      featureTitle:       record.title        ?? record.featureTitle ?? "",
+      featureDescription: record.description  ?? "",
+      targetUsers:        record.users        ?? record.targetUsers  ?? "",
+      businessGoal:       record.goal         ?? record.businessGoal ?? "",
     });
+    const out = record.output ?? record;
     setResult({
-      summary:  record.summary,
-      prd:      record.prd,
-      items:    record.items,
-      insights: record.insights,
-      metadata: record.metadata,
+      summary:  out.summary,
+      prd:      out.prd,
+      items:    out.items,
+      insights: out.insights,
+      metadata: out.metadata,
     });
     setError("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   async function handleSubmit() {
@@ -122,6 +125,7 @@ export default function App() {
           <PRDSection prd={result?.prd} summary={result?.summary} />
           <TaskTable items={result?.items} />
           <SprintBoard items={result?.items} />
+          <HistorySection onReuse={handleReuse} />
         </div>
       </main>
 
