@@ -90,7 +90,7 @@ export default function App() {
           </div>
         )}
 
-        <PRDSection summary={result?.summary} insights={result?.insights} />
+        <PRDSection prd={result?.prd} summary={result?.summary} />
         <TaskTable items={result?.items} />
         <SprintBoard items={result?.items} />
       </main>

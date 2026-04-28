@@ -1,13 +1,35 @@
-const SUBSECTIONS = [
-  { key: "problem",   label: "Problem Statement",       hint: "What problem does this feature solve? Who experiences it and how often?" },
-  { key: "goals",     label: "Goals & Success Criteria", hint: "What does success look like? Define measurable outcomes." },
-  { key: "personas",  label: "User Personas",            hint: "Who are the target users? Describe their roles, needs, and pain points." },
-  { key: "usecases",  label: "Use Cases",                hint: "List the primary use cases and user flows this feature enables." },
-  { key: "metrics",   label: "Metrics & KPIs",          hint: "How will you measure the impact? Define key metrics and baselines." },
+const EMPTY_SECTIONS = [
+  { key: "problem",   label: "Problem Statement",  hint: "What problem does this feature solve? Who experiences it and how often?" },
+  { key: "goals",     label: "Goals",              hint: "What does success look like? Define measurable outcomes." },
+  { key: "personas",  label: "Target Users",       hint: "Who are the target users? Describe their roles, needs, and pain points." },
+  { key: "useCases",  label: "Use Cases",          hint: "List the primary use cases and user flows this feature enables." },
+  { key: "metrics",   label: "Success Metrics",    hint: "How will you measure the impact? Define key metrics and baselines." },
 ];
 
-export default function PRDSection({ summary, insights }) {
-  const hasData = summary || (insights && insights.length > 0);
+function TextRow({ label, value }) {
+  return (
+    <div className="prd-row">
+      <span className="prd-label">{label}</span>
+      <div className="prd-content">{value}</div>
+    </div>
+  );
+}
+
+function ListRow({ label, items }) {
+  return (
+    <div className="prd-row">
+      <span className="prd-label">{label}</span>
+      <ul className="prd-list">
+        {items.map((item, i) => (
+          <li key={i}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default function PRDSection({ prd, summary }) {
+  const hasData = !!prd;
 
   return (
     <div className="card card--indigo">
@@ -17,25 +39,14 @@ export default function PRDSection({ summary, insights }) {
       <div className="card-body prd-body">
         {hasData ? (
           <>
-            {summary && (
-              <div className="prd-row">
-                <span className="prd-label">Summary</span>
-                <div className="prd-content">{summary}</div>
-              </div>
-            )}
-            {insights && insights.length > 0 && (
-              <div className="prd-row">
-                <span className="prd-label">Insights</span>
-                <ul className="prd-insights">
-                  {insights.map((ins, i) => (
-                    <li key={i}>{ins}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            <TextRow label="Problem Statement" value={prd.problem} />
+            <TextRow label="Goals"             value={prd.goals} />
+            <TextRow label="Target Users"      value={prd.personas} />
+            <ListRow label="Use Cases"         items={prd.useCases} />
+            <ListRow label="Success Metrics"   items={prd.metrics} />
           </>
         ) : (
-          SUBSECTIONS.map(({ key, label, hint }) => (
+          EMPTY_SECTIONS.map(({ key, label, hint }) => (
             <div key={key} className="prd-row">
               <span className="prd-label">{label}</span>
               <div className="prd-placeholder">

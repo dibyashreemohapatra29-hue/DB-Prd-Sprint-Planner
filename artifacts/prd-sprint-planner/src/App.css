@@ -367,6 +367,32 @@ body {
 }
 
 /* ─── PRD actual content ─────────────────── */
+.prd-list {
+  flex: 1;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.prd-list li {
+  font-size: 0.82rem;
+  color: var(--t2);
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.55;
+}
+
+.prd-list li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--indigo);
+  font-weight: 700;
+  font-size: 0.72rem;
+  top: 1px;
+}
+
 .prd-content {
   flex: 1;
   font-size: 0.85rem;
