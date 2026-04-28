@@ -3,9 +3,8 @@ import Sidebar from "./components/Sidebar";
 import PRDSection from "./components/PRDSection";
 import TaskTable from "./components/TaskTable";
 import SprintBoard from "./components/SprintBoard";
+import FullReport from "./components/FullReport";
 import "./App.css";
-
-const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 export default function App() {
   const [formData, setFormData] = useState({
@@ -18,6 +17,7 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showReport, setShowReport] = useState(false);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -72,6 +72,7 @@ export default function App() {
       />
 
       <main className="main-content">
+        {/* Top bar */}
         <div className="main-topbar">
           <div>
             <h1 className="main-title">Output</h1>
@@ -81,7 +82,14 @@ export default function App() {
               </p>
             )}
           </div>
-          <div className="avatar">PM</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {result && (
+              <button className="btn-view-report" onClick={() => setShowReport(true)}>
+                View Full Report
+              </button>
+            )}
+            <div className="avatar">PM</div>
+          </div>
         </div>
 
         {loading && (
@@ -90,10 +98,22 @@ export default function App() {
           </div>
         )}
 
-        <PRDSection prd={result?.prd} summary={result?.summary} />
-        <TaskTable items={result?.items} />
-        <SprintBoard items={result?.items} />
+        {/* Output preview — scrollable */}
+        <div className="output-scroll">
+          <PRDSection prd={result?.prd} summary={result?.summary} />
+          <TaskTable items={result?.items} />
+          <SprintBoard items={result?.items} />
+        </div>
       </main>
+
+      {/* Full report modal */}
+      {showReport && result && (
+        <FullReport
+          result={result}
+          featureTitle={formData.featureTitle}
+          onClose={() => setShowReport(false)}
+        />
+      )}
     </div>
   );
 }
