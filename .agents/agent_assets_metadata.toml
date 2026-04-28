@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "BPcS69kOlylDcpW7NKp8s"
+uri = "file://CHANGELOG.md"
+type = "text"
+title = "CHANGELOG.md — Stage history"
