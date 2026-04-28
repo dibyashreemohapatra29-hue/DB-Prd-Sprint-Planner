@@ -4,7 +4,7 @@ export default function Navbar() {
       <div className="navbar-inner">
         <div className="navbar-brand">
           <span className="navbar-logo">◈</span>
-          <span className="navbar-title">PRD → Sprint Planner</span>
+          <span className="navbar-title">PRD → SPRINT PLANNER</span>
         </div>
         <div className="navbar-right">
           <div className="avatar">PM</div>
