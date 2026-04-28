@@ -1,42 +1,26 @@
-function SubSection({ label, placeholder }) {
-  return (
-    <div className="prd-subsection">
-      <div className="prd-subsection-label">{label}</div>
-      <div className="prd-subsection-body">
-        <p className="placeholder-text">{placeholder}</p>
-      </div>
-    </div>
-  );
-}
+const subsections = [
+  { label: "Problem Statement",      hint: "What problem does this feature solve? Who experiences it and how often?" },
+  { label: "Goals & Success Criteria", hint: "What does success look like? Define measurable outcomes." },
+  { label: "User Personas",          hint: "Who are the target users? Describe their roles, needs, and pain points." },
+  { label: "Use Cases",              hint: "List the primary use cases and user flows this feature enables." },
+  { label: "Metrics & KPIs",        hint: "How will you measure the impact? Define key metrics and baselines." },
+];
 
 export default function PRDSection() {
   return (
-    <div className="card">
+    <div className="card card--indigo">
       <div className="card-header">
         <h2 className="card-title">Product Requirements Document</h2>
-        <p className="card-description">Auto-generated PRD based on your feature input.</p>
       </div>
       <div className="card-body prd-body">
-        <SubSection
-          label="Problem Statement"
-          placeholder="What problem does this feature solve? Who experiences it and how often?"
-        />
-        <SubSection
-          label="Goals & Success Criteria"
-          placeholder="What does success look like? Define measurable outcomes."
-        />
-        <SubSection
-          label="User Personas"
-          placeholder="Who are the target users? Describe their roles, needs, and pain points."
-        />
-        <SubSection
-          label="Use Cases"
-          placeholder="List the primary use cases and user flows this feature enables."
-        />
-        <SubSection
-          label="Metrics & KPIs"
-          placeholder="How will you measure the impact? Define key metrics and baselines."
-        />
+        {subsections.map(({ label, hint }) => (
+          <div key={label} className="prd-row">
+            <span className="prd-label">{label}</span>
+            <div className="prd-placeholder">
+              <p className="placeholder-text">{hint}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

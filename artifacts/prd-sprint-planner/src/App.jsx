@@ -1,6 +1,5 @@
 import { useState } from "react";
-import Navbar from "./components/Navbar";
-import InputForm from "./components/InputForm";
+import Sidebar from "./components/Sidebar";
 import PRDSection from "./components/PRDSection";
 import TaskTable from "./components/TaskTable";
 import SprintBoard from "./components/SprintBoard";
@@ -22,37 +21,18 @@ export default function App() {
   function handleSubmit() {}
 
   return (
-    <div className="page-root">
-      <Navbar />
-      <main className="page-content">
-        <div className="page-container">
+    <div className="app-shell">
+      <Sidebar formData={formData} onChange={handleChange} onSubmit={handleSubmit} />
 
-          <section className="section-block">
-            <InputForm
-              formData={formData}
-              onChange={handleChange}
-              onSubmit={handleSubmit}
-            />
-          </section>
-
-          <div className="output-heading">
-            <span className="output-badge">Output</span>
-            <div className="output-divider" />
-          </div>
-
-          <section className="section-block">
-            <PRDSection />
-          </section>
-
-          <section className="section-block">
-            <TaskTable />
-          </section>
-
-          <section className="section-block">
-            <SprintBoard />
-          </section>
-
+      <main className="main-content">
+        <div className="main-topbar">
+          <h1 className="main-title">Output</h1>
+          <div className="avatar">PM</div>
         </div>
+
+        <PRDSection />
+        <TaskTable />
+        <SprintBoard />
       </main>
     </div>
   );
