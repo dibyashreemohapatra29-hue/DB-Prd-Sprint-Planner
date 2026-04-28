@@ -1,6 +1,7 @@
 import { Router, type IRouter, type Request, type Response } from "express";
 import { db, workflowsTable } from "@workspace/db";
 import { logger } from "../lib/logger";
+import { supabase } from "../lib/supabase";
 
 const router: IRouter = Router();
 
@@ -111,7 +112,7 @@ router.post("/generate", async (req: Request, res: Response) => {
     ];
     const metadata = { priority: derivePriority(effort, risk), risk };
 
-    // Persist to database
+    // Persist to local database
     await db.insert(workflowsTable).values({
       featureTitle: title.trim(),
       description:  description.trim(),
@@ -123,6 +124,23 @@ router.post("/generate", async (req: Request, res: Response) => {
       insights,
       metadata,
     });
+
+    // Persist to Supabase
+    console.log("[Supabase] Saving workflow to Supabase...");
+    const { error: supabaseError } = await supabase.from("workflows").insert({
+      title:       title.trim(),
+      description: description.trim(),
+      users:       users?.trim()  || "",
+      goal:        goal?.trim()   || "",
+      output:      { summary, prd, items, insights, metadata },
+      created_at:  new Date().toISOString(),
+    });
+
+    if (supabaseError) {
+      console.error("[Supabase] Error saving workflow:", supabaseError.message);
+    } else {
+      console.log("[Supabase] Workflow saved successfully.");
+    }
 
     const response = { summary, prd, items, insights, metadata };
 
