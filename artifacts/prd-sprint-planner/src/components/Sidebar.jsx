@@ -1,9 +1,9 @@
-export default function Sidebar({ formData, onChange, onSubmit }) {
+export default function Sidebar({ formData, onChange, onSubmit, loading, error }) {
   const fields = [
-    { name: "featureTitle",       label: "Feature Title",    placeholder: "e.g., Add dark mode for dashboard", type: "input" },
-    { name: "targetUsers",        label: "Target Users",     placeholder: "e.g., power users, new users",      type: "input" },
-    { name: "businessGoal",       label: "Business Goal",    placeholder: "e.g., increase retention",          type: "input" },
-    { name: "featureDescription", label: "Description",      placeholder: "Describe the feature and problem…", type: "textarea" },
+    { name: "featureTitle",       label: "Feature Title",    placeholder: "e.g., Add dark mode for dashboard", type: "input",    required: true },
+    { name: "targetUsers",        label: "Target Users",     placeholder: "e.g., power users, new users",      type: "input",    required: false },
+    { name: "businessGoal",       label: "Business Goal",    placeholder: "e.g., increase retention",          type: "input",    required: false },
+    { name: "featureDescription", label: "Description",      placeholder: "Describe the feature and problem…", type: "textarea", required: true },
   ];
 
   return (
@@ -17,9 +17,12 @@ export default function Sidebar({ formData, onChange, onSubmit }) {
       </div>
 
       <div className="sidebar-form">
-        {fields.map(({ name, label, placeholder, type }) => (
+        {fields.map(({ name, label, placeholder, type, required }) => (
           <div key={name} className="form-group">
-            <label htmlFor={name}>{label}</label>
+            <label htmlFor={name}>
+              {label}
+              {required && <span className="form-required">*</span>}
+            </label>
             {type === "textarea" ? (
               <textarea
                 id={name}
@@ -28,6 +31,7 @@ export default function Sidebar({ formData, onChange, onSubmit }) {
                 onChange={onChange}
                 placeholder={placeholder}
                 rows={5}
+                disabled={loading}
               />
             ) : (
               <input
@@ -37,15 +41,18 @@ export default function Sidebar({ formData, onChange, onSubmit }) {
                 value={formData[name]}
                 onChange={onChange}
                 placeholder={placeholder}
+                disabled={loading}
               />
             )}
           </div>
         ))}
+
+        {error && <div className="form-error">{error}</div>}
       </div>
 
       <div className="sidebar-footer">
-        <button className="btn-generate" onClick={onSubmit}>
-          Generate Plan
+        <button className="btn-generate" onClick={onSubmit} disabled={loading}>
+          {loading ? "Generating…" : "Generate Plan"}
         </button>
       </div>
     </aside>
