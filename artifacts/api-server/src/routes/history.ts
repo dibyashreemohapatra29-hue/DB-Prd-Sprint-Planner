@@ -2,23 +2,28 @@ import { Router, type IRouter, type Request, type Response } from "express";
 import { db, workflowsTable } from "@workspace/db";
 import { desc, eq } from "drizzle-orm";
 import { logger } from "../lib/logger";
+import { supabase } from "../lib/supabase";
 
 const router: IRouter = Router();
 
-// GET /history — retrieve all records (newest first)
+// GET /history — fetch all records from Supabase (newest first)
 router.get("/history", async (_req: Request, res: Response) => {
-  logger.info("GET /history — fetching records");
+  console.log("[Supabase] GET /history — fetching records from Supabase...");
   try {
-    const rows = await db
-      .select()
-      .from(workflowsTable)
-      .orderBy(desc(workflowsTable.createdAt))
-      .limit(50);
+    const { data, error } = await supabase
+      .from("workflows")
+      .select("title, description, users, goal, output, created_at")
+      .order("created_at", { ascending: false });
 
-    logger.info({ count: rows.length }, "GET /history — returned");
-    return res.json(rows);
+    if (error) {
+      console.error("[Supabase] GET /history — error:", error.message);
+      return res.status(500).json({ error: "Failed to fetch history" });
+    }
+
+    console.log(`[Supabase] GET /history — returned ${data.length} record(s)`);
+    return res.json(data);
   } catch (err) {
-    logger.error({ err }, "GET /history — error");
+    console.error("[Supabase] GET /history — unexpected error:", err);
     return res.status(500).json({ error: "Failed to fetch history" });
   }
 });
