@@ -4,6 +4,7 @@ import PRDSection from "./components/PRDSection";
 import TaskTable from "./components/TaskTable";
 import SprintBoard from "./components/SprintBoard";
 import FullReport from "./components/FullReport";
+import HistoryPanel from "./components/HistoryPanel";
 import "./App.css";
 
 export default function App() {
@@ -14,15 +15,34 @@ export default function App() {
     businessGoal: "",
   });
 
-  const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [result, setResult]         = useState(null);
+  const [loading, setLoading]       = useState(false);
+  const [error, setError]           = useState("");
   const [showReport, setShowReport] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
 
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (error) setError("");
+  }
+
+  // Pre-fill form from a history record
+  function handleReuse(record) {
+    setFormData({
+      featureTitle:       record.featureTitle,
+      featureDescription: record.description,
+      targetUsers:        record.targetUsers  || "",
+      businessGoal:       record.businessGoal || "",
+    });
+    setResult({
+      summary:  record.summary,
+      prd:      record.prd,
+      items:    record.items,
+      insights: record.insights,
+      metadata: record.metadata,
+    });
+    setError("");
   }
 
   async function handleSubmit() {
@@ -40,10 +60,10 @@ export default function App() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title: formData.featureTitle,
+          title:       formData.featureTitle,
           description: formData.featureDescription,
-          users: formData.targetUsers,
-          goal: formData.businessGoal,
+          users:       formData.targetUsers,
+          goal:        formData.businessGoal,
         }),
       });
 
@@ -67,12 +87,12 @@ export default function App() {
         formData={formData}
         onChange={handleChange}
         onSubmit={handleSubmit}
+        onHistory={() => setShowHistory(true)}
         loading={loading}
         error={error}
       />
 
       <main className="main-content">
-        {/* Top bar */}
         <div className="main-topbar">
           <div>
             <h1 className="main-title">Output</h1>
@@ -98,7 +118,6 @@ export default function App() {
           </div>
         )}
 
-        {/* Output preview — scrollable */}
         <div className="output-scroll">
           <PRDSection prd={result?.prd} summary={result?.summary} />
           <TaskTable items={result?.items} />
@@ -106,12 +125,18 @@ export default function App() {
         </div>
       </main>
 
-      {/* Full report modal */}
       {showReport && result && (
         <FullReport
           result={result}
           featureTitle={formData.featureTitle}
           onClose={() => setShowReport(false)}
+        />
+      )}
+
+      {showHistory && (
+        <HistoryPanel
+          onReuse={handleReuse}
+          onClose={() => setShowHistory(false)}
         />
       )}
     </div>

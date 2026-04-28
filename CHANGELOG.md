@@ -1,5 +1,15 @@
 # Changelog
 
+## Stage 4: Database integration
+**Checkpoint:** _(auto-generated at next save)_
+- Provisioned PostgreSQL database; created `workflows` table via Drizzle ORM
+- `POST /api/generate` now persists every generated plan (inputs + full output + timestamp)
+- `GET /api/history` returns all past records (newest first, limit 50)
+- `GET /api/history/:id` retrieves a single record by ID
+- History panel: "🕑 View History" button in sidebar opens a modal listing past plans with feature title, timestamp, priority/risk badges
+- Reuse button pre-fills the form and restores the full output for any past record
+
+
 ## Stage 3: End-to-end integration
 **Checkpoint:** `d5c593b34db407994f4279e74114fbfff6f31a05`
 - Added "View Full Report" modal with all output sections (PRD, Tasks, Sprint Plan, Insights)

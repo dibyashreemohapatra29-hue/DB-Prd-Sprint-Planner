@@ -1,4 +1,4 @@
-export default function Sidebar({ formData, onChange, onSubmit, loading, error }) {
+export default function Sidebar({ formData, onChange, onSubmit, onHistory, loading, error }) {
   const fields = [
     { name: "featureTitle",       label: "Feature Title",    placeholder: "e.g., Add dark mode for dashboard", type: "input",    required: true },
     { name: "targetUsers",        label: "Target Users",     placeholder: "e.g., power users, new users",      type: "input",    required: false },
@@ -53,6 +53,9 @@ export default function Sidebar({ formData, onChange, onSubmit, loading, error }
       <div className="sidebar-footer">
         <button className="btn-generate" onClick={onSubmit} disabled={loading}>
           {loading ? "Generating…" : "Generate Plan"}
+        </button>
+        <button className="btn-history" onClick={onHistory} disabled={loading}>
+          🕑 View History
         </button>
       </div>
     </aside>
