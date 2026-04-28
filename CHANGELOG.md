@@ -1,13 +1,21 @@
 # Changelog
 
 ## Stage 4: Database integration
-**Checkpoint:** _(auto-generated at next save)_
-- Provisioned PostgreSQL database; created `workflows` table via Drizzle ORM
-- `POST /api/generate` now persists every generated plan (inputs + full output + timestamp)
-- `GET /api/history` returns all past records (newest first, limit 50)
-- `GET /api/history/:id` retrieves a single record by ID
-- History panel: "🕑 View History" button in sidebar opens a modal listing past plans with feature title, timestamp, priority/risk badges
-- Reuse button pre-fills the form and restores the full output for any past record
+**Checkpoint:** `a61c328d5eb39b1817f0f31bcbd6abf3209f1ef5`
+
+### PostgreSQL (local)
+- Created `workflows` table via Drizzle ORM
+- `POST /api/generate` saves every plan to local DB on success
+
+### Supabase
+- Installed `@supabase/supabase-js`; client initialized with service role key (bypasses RLS)
+- `POST /api/generate` also saves to Supabase `workflows` table: `title`, `description`, `users`, `goal`, `output` (JSON), `created_at`
+- `GET /api/history` fetches all records from Supabase, ordered by `created_at` DESC
+
+### Frontend
+- Inline **History section** added below Sprint Plan — fetches from `/api/history` on load
+- Each card shows feature title + formatted date with a **Reuse** button
+- Reuse fills all form fields and restores the full output instantly
 
 
 ## Stage 3: End-to-end integration
