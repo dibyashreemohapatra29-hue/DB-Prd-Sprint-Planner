@@ -11,12 +11,14 @@ function timeAgo(dateStr) {
   return `${days}d ago`;
 }
 
-export default function HistoryPanel({ onReuse, onClose }) {
+export default function HistoryPanel({ onReuse, onClose, refreshKey = 0 }) {
   const [records, setRecords]  = useState([]);
   const [loading, setLoading]  = useState(true);
   const [error, setError]      = useState("");
 
   useEffect(() => {
+    setLoading(true);
+    setError("");
     fetch("/api/history")
       .then((r) => r.json())
       .then((data) => {
@@ -25,7 +27,7 @@ export default function HistoryPanel({ onReuse, onClose }) {
       })
       .catch(() => setError("Could not reach the server."))
       .finally(() => setLoading(false));
-  }, []);
+  }, [refreshKey]);
 
   return (
     <div className="history-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>

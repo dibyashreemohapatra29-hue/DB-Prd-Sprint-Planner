@@ -5,6 +5,7 @@ import TaskTable from "./components/TaskTable";
 import SprintBoard from "./components/SprintBoard";
 import FullReport from "./components/FullReport";
 import HistorySection from "./components/HistorySection";
+import HistoryPanel from "./components/HistoryPanel";
 import "./App.css";
 
 export default function App() {
@@ -19,9 +20,10 @@ export default function App() {
   const [loading,     setLoading]     = useState(false);
   const [error,       setError]       = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
-  const [showReport,  setShowReport]  = useState(false);
-  const [view,        setView]        = useState("output");
-  const [historyKey,  setHistoryKey]  = useState(0);
+  const [showReport,       setShowReport]       = useState(false);
+  const [showHistoryPanel, setShowHistoryPanel] = useState(false);
+  const [view,             setView]             = useState("output");
+  const [historyKey,       setHistoryKey]       = useState(0);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -113,7 +115,7 @@ export default function App() {
         formData={formData}
         onChange={handleChange}
         onSubmit={handleSubmit}
-        onHistory={goToHistory}
+        onHistory={() => setShowHistoryPanel(true)}
         loading={loading}
         error={error}
         fieldErrors={fieldErrors}
@@ -206,6 +208,14 @@ export default function App() {
           result={result}
           featureTitle={formData.featureTitle}
           onClose={() => setShowReport(false)}
+        />
+      )}
+
+      {showHistoryPanel && (
+        <HistoryPanel
+          refreshKey={historyKey}
+          onReuse={(rec) => { handleReuse(rec); setShowHistoryPanel(false); }}
+          onClose={() => setShowHistoryPanel(false)}
         />
       )}
     </div>
