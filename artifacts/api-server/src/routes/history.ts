@@ -28,30 +28,36 @@ router.get("/history", async (_req: Request, res: Response) => {
   }
 });
 
-// DELETE /workflow/:id — delete a workflow by ID
-router.delete("/workflow/:id", async (req: Request, res: Response) => {
+// DELETE /history/:id — delete a workflow by ID
+router.delete("/history/:id", async (req: Request, res: Response) => {
   const id = req.params.id;
-  logger.info({ id }, "DELETE /workflow/:id");
+  logger.info({ id }, "DELETE /history/:id");
 
   if (!id) {
     return res.status(400).json({ error: "Missing workflow id" });
   }
 
   try {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("workflows")
       .delete()
-      .eq("id", id);
+      .eq("id", id)
+      .select("id");
 
     if (error) {
-      logger.error({ err: error.message, id }, "DELETE /workflow/:id — error");
+      logger.error({ err: error.message, id }, "DELETE /history/:id — error");
       return res.status(500).json({ error: "Failed to delete workflow" });
     }
 
-    logger.info({ id }, "DELETE /workflow/:id — deleted");
+    if (!data || data.length === 0) {
+      logger.warn({ id }, "DELETE /history/:id — not found");
+      return res.status(404).json({ error: "Workflow not found" });
+    }
+
+    logger.info({ id }, "DELETE /history/:id — deleted");
     return res.status(200).json({ success: true });
   } catch (err) {
-    logger.error({ err, id }, "DELETE /workflow/:id — unexpected error");
+    logger.error({ err, id }, "DELETE /history/:id — unexpected error");
     return res.status(500).json({ error: "Failed to delete workflow" });
   }
 });

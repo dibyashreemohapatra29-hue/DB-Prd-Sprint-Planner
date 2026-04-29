@@ -93,7 +93,7 @@ function WorkflowCard({ rec, onReuse, onDelete }) {
     setDeleting(true);
     setDelError("");
     try {
-      const res = await fetch(`/api/workflow/${rec.id}`, { method: "DELETE" });
+      const res = await fetch(`/api/history/${rec.id}`, { method: "DELETE" });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error || "Delete failed");
