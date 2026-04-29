@@ -76,19 +76,47 @@ function RiskBadge({ risk }) {
   return <span className={`adm-badge ${cls}`}>{risk || "—"} risk</span>;
 }
 
-function WorkflowCard({ rec, onReuse }) {
-  const [open, setOpen] = useState(false);
+function WorkflowCard({ rec, onReuse, onDelete }) {
+  const [open,      setOpen]      = useState(false);
+  const [confirm,   setConfirm]   = useState(false);
+  const [deleting,  setDeleting]  = useState(false);
+  const [delError,  setDelError]  = useState("");
 
   const out      = rec.output || {};
   const meta     = out.metadata || {};
   const items    = Array.isArray(out.items) ? out.items : [];
   const insights = Array.isArray(out.insights) ? out.insights : [];
 
+  async function handleDelete(e) {
+    e.stopPropagation();
+    if (!confirm) { setConfirm(true); return; }
+    setDeleting(true);
+    setDelError("");
+    try {
+      const res = await fetch(`/api/workflow/${rec.id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || "Delete failed");
+      }
+      onDelete(rec.id);
+    } catch (err) {
+      setDelError(err.message || "Could not delete workflow.");
+      setDeleting(false);
+      setConfirm(false);
+    }
+  }
+
+  function cancelDelete(e) {
+    e.stopPropagation();
+    setConfirm(false);
+    setDelError("");
+  }
+
   return (
     <div className={`adm-card ${open ? "adm-card--open" : ""}`}>
 
       {/* ── Collapsed header ── */}
-      <button className="adm-card-header" onClick={() => setOpen((v) => !v)}>
+      <button className="adm-card-header" onClick={() => { setConfirm(false); setOpen((v) => !v); }}>
         <div className="adm-card-header-left">
           <span className="adm-card-chevron">{open ? "▾" : "▸"}</span>
           <div>
@@ -100,8 +128,28 @@ function WorkflowCard({ rec, onReuse }) {
           {meta.priority && <PriorityBadge priority={meta.priority} />}
           {meta.risk      && <RiskBadge risk={meta.risk} />}
           {meta.effort    && <EffortBadge effort={meta.effort} />}
+          {/* Delete control — sits in header, stops propagation */}
+          {confirm ? (
+            <span className="adm-delete-confirm" onClick={(e) => e.stopPropagation()}>
+              <span className="adm-delete-confirm-text">Delete?</span>
+              <button className="adm-delete-confirm-yes" onClick={handleDelete} disabled={deleting}>
+                {deleting ? "…" : "Yes"}
+              </button>
+              <button className="adm-delete-confirm-no" onClick={cancelDelete}>No</button>
+            </span>
+          ) : (
+            <button
+              className="adm-delete-btn"
+              onClick={handleDelete}
+              title="Delete workflow"
+              aria-label="Delete workflow"
+            >
+              ✕
+            </button>
+          )}
         </div>
       </button>
+      {delError && <p className="adm-delete-error">{delError}</p>}
 
       {/* ── Expanded body ── */}
       {open && (
@@ -346,7 +394,12 @@ export default function HistorySection({ onReuse }) {
       {!loading && !error && filtered.length > 0 && (
         <div className="adm-cards-list">
           {filtered.map((rec, i) => (
-            <WorkflowCard key={rec.id ?? i} rec={rec} onReuse={onReuse} />
+            <WorkflowCard
+              key={rec.id ?? i}
+              rec={rec}
+              onReuse={onReuse}
+              onDelete={(id) => setRecords((prev) => prev.filter((r) => r.id !== id))}
+            />
           ))}
         </div>
       )}

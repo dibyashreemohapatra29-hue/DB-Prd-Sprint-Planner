@@ -1,6 +1,6 @@
 import { Router, type IRouter, type Request, type Response } from "express";
 import { db, workflowsTable } from "@workspace/db";
-import { desc, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { logger } from "../lib/logger";
 import { supabase } from "../lib/supabase";
 
@@ -8,23 +8,51 @@ const router: IRouter = Router();
 
 // GET /history — fetch all records from Supabase (newest first)
 router.get("/history", async (_req: Request, res: Response) => {
-  console.log("[Supabase] GET /history — fetching records from Supabase...");
+  logger.info("GET /history — fetching records from Supabase");
   try {
     const { data, error } = await supabase
       .from("workflows")
-      .select("title, description, users, goal, output, created_at")
+      .select("id, title, description, users, goal, output, created_at")
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("[Supabase] GET /history — error:", error.message);
+      logger.error({ err: error.message }, "GET /history — error");
       return res.status(500).json({ error: "Failed to fetch history" });
     }
 
-    console.log(`[Supabase] GET /history — returned ${data.length} record(s)`);
+    logger.info({ count: data.length }, "GET /history — returned records");
     return res.json(data);
   } catch (err) {
-    console.error("[Supabase] GET /history — unexpected error:", err);
+    logger.error({ err }, "GET /history — unexpected error");
     return res.status(500).json({ error: "Failed to fetch history" });
+  }
+});
+
+// DELETE /workflow/:id — delete a workflow by ID
+router.delete("/workflow/:id", async (req: Request, res: Response) => {
+  const id = req.params.id;
+  logger.info({ id }, "DELETE /workflow/:id");
+
+  if (!id) {
+    return res.status(400).json({ error: "Missing workflow id" });
+  }
+
+  try {
+    const { error } = await supabase
+      .from("workflows")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      logger.error({ err: error.message, id }, "DELETE /workflow/:id — error");
+      return res.status(500).json({ error: "Failed to delete workflow" });
+    }
+
+    logger.info({ id }, "DELETE /workflow/:id — deleted");
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    logger.error({ err, id }, "DELETE /workflow/:id — unexpected error");
+    return res.status(500).json({ error: "Failed to delete workflow" });
   }
 });
 

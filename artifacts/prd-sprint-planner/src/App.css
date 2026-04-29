@@ -1707,3 +1707,86 @@ body {
   border-color: var(--indigo);
   color: var(--indigo);
 }
+
+/* ── Delete button & inline confirmation ── */
+
+.adm-delete-btn {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--t3);
+  font-size: 0.7rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  margin-left: 6px;
+}
+
+.adm-delete-btn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.adm-delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+  background: #fff8f8;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 3px 8px 3px 10px;
+}
+
+.adm-delete-confirm-text {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #dc2626;
+  white-space: nowrap;
+}
+
+.adm-delete-confirm-yes {
+  padding: 3px 10px;
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.adm-delete-confirm-yes:hover  { background: #b91c1c; }
+.adm-delete-confirm-yes:disabled { opacity: 0.6; cursor: default; }
+
+.adm-delete-confirm-no {
+  padding: 3px 8px;
+  background: transparent;
+  color: var(--t2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s;
+}
+
+.adm-delete-confirm-no:hover {
+  border-color: var(--t2);
+  color: var(--t1);
+}
+
+.adm-delete-error {
+  margin: 4px 16px 0;
+  font-size: 0.76rem;
+  color: #dc2626;
+}
