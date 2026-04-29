@@ -1,4 +1,4 @@
-export default function Sidebar({ formData, onChange, onSubmit, onHistory, loading, error }) {
+export default function Sidebar({ formData, onChange, onSubmit, onHistory, loading, error, fieldErrors = {} }) {
   const fields = [
     { name: "featureTitle",       label: "Feature Title",    placeholder: "e.g., Add dark mode for dashboard", type: "input",    required: true },
     { name: "targetUsers",        label: "Target Users",     placeholder: "e.g., power users, new users",      type: "input",    required: false },
@@ -18,7 +18,7 @@ export default function Sidebar({ formData, onChange, onSubmit, onHistory, loadi
 
       <div className="sidebar-form">
         {fields.map(({ name, label, placeholder, type, required }) => (
-          <div key={name} className="form-group">
+          <div key={name} className={`form-group ${fieldErrors[name] ? "form-group--error" : ""}`}>
             <label htmlFor={name}>
               {label}
               {required && <span className="form-required">*</span>}
@@ -32,6 +32,7 @@ export default function Sidebar({ formData, onChange, onSubmit, onHistory, loadi
                 placeholder={placeholder}
                 rows={5}
                 disabled={loading}
+                className={fieldErrors[name] ? "input--error" : ""}
               />
             ) : (
               <input
@@ -42,7 +43,11 @@ export default function Sidebar({ formData, onChange, onSubmit, onHistory, loadi
                 onChange={onChange}
                 placeholder={placeholder}
                 disabled={loading}
+                className={fieldErrors[name] ? "input--error" : ""}
               />
+            )}
+            {fieldErrors[name] && (
+              <p className="field-error">{fieldErrors[name]}</p>
             )}
           </div>
         ))}
@@ -52,7 +57,14 @@ export default function Sidebar({ formData, onChange, onSubmit, onHistory, loadi
 
       <div className="sidebar-footer">
         <button className="btn-generate" onClick={onSubmit} disabled={loading}>
-          {loading ? "Generating…" : "Generate Plan"}
+          {loading ? (
+            <span className="btn-generate-loading">
+              <span className="btn-spinner" />
+              Generating…
+            </span>
+          ) : (
+            "Generate Plan"
+          )}
         </button>
         <button className="btn-history" onClick={onHistory} disabled={loading}>
           🕑 View History

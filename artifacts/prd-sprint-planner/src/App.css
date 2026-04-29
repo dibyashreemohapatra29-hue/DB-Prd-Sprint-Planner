@@ -159,7 +159,7 @@ body {
 .output-scroll {
   flex: 1;
   overflow-y: auto;
-  padding: 0 32px 32px;
+  padding: 16px 32px 32px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -261,6 +261,10 @@ body {
 
 .card-header {
   padding: 16px 20px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .card-title {
@@ -514,10 +518,8 @@ body {
 .loading-bar {
   height: 3px;
   background: #e4e7ec;
-  border-radius: 999px;
   overflow: hidden;
   flex-shrink: 0;
-  margin-bottom: -8px;
 }
 
 @keyframes loadingSlide {
@@ -1706,6 +1708,144 @@ body {
 .adm-clear-btn:hover {
   border-color: var(--indigo);
   color: var(--indigo);
+}
+
+/* ── Spinner keyframe ── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+.btn-generate-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* ── Per-field validation ── */
+.form-group--error input,
+.form-group--error textarea,
+.input--error {
+  border-color: #f87171 !important;
+  background: #fff8f8 !important;
+}
+
+.form-group--error input:focus,
+.form-group--error textarea:focus {
+  box-shadow: 0 0 0 3px rgba(239,68,68,.12) !important;
+}
+
+.field-error {
+  font-size: 0.72rem;
+  color: #dc2626;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+/* ── Error banner ── */
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 32px;
+  padding: 11px 14px;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: var(--r8);
+  font-size: 0.82rem;
+  color: #dc2626;
+  flex-shrink: 0;
+}
+
+.error-banner-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.error-banner-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #f87171;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: color 0.12s;
+}
+
+.error-banner-close:hover { color: #dc2626; }
+
+/* ── Regenerate button ── */
+.btn-regenerate {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: transparent;
+  color: var(--t2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r6);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-family: var(--font);
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.btn-regenerate:hover {
+  border-color: var(--indigo);
+  color: var(--indigo);
+  background: #f5f3ff;
+}
+
+.btn-regenerate:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-regenerate .btn-spinner {
+  border-color: rgba(99,102,241,0.3);
+  border-top-color: var(--indigo);
+}
+
+/* ── Copy PRD button ── */
+.btn-copy-prd {
+  padding: 5px 12px;
+  background: var(--surface);
+  color: var(--t2);
+  border: 1px solid var(--border);
+  border-radius: var(--r6);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: var(--font);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.btn-copy-prd:hover {
+  border-color: var(--indigo);
+  color: var(--indigo);
+  background: #f5f3ff;
+}
+
+.btn-copy-prd--success {
+  color: var(--green);
+  font-weight: 600;
 }
 
 /* ── Delete button & inline confirmation ── */

@@ -116,7 +116,13 @@ function WorkflowCard({ rec, onReuse, onDelete }) {
     <div className={`adm-card ${open ? "adm-card--open" : ""}`}>
 
       {/* ── Collapsed header ── */}
-      <button className="adm-card-header" onClick={() => { setConfirm(false); setOpen((v) => !v); }}>
+      <div
+        className="adm-card-header"
+        role="button"
+        tabIndex={0}
+        onClick={() => { setConfirm(false); setOpen((v) => !v); }}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { setConfirm(false); setOpen((v) => !v); } }}
+      >
         <div className="adm-card-header-left">
           <span className="adm-card-chevron">{open ? "▾" : "▸"}</span>
           <div>
@@ -128,7 +134,6 @@ function WorkflowCard({ rec, onReuse, onDelete }) {
           {meta.priority && <PriorityBadge priority={meta.priority} />}
           {meta.risk      && <RiskBadge risk={meta.risk} />}
           {meta.effort    && <EffortBadge effort={meta.effort} />}
-          {/* Delete control — sits in header, stops propagation */}
           {confirm ? (
             <span className="adm-delete-confirm" onClick={(e) => e.stopPropagation()}>
               <span className="adm-delete-confirm-text">Delete?</span>
@@ -148,7 +153,7 @@ function WorkflowCard({ rec, onReuse, onDelete }) {
             </button>
           )}
         </div>
-      </button>
+      </div>
       {delError && <p className="adm-delete-error">{delError}</p>}
 
       {/* ── Expanded body ── */}

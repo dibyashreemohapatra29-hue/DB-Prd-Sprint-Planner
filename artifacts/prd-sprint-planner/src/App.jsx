@@ -18,6 +18,7 @@ export default function App() {
   const [result,      setResult]      = useState(null);
   const [loading,     setLoading]     = useState(false);
   const [error,       setError]       = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const [showReport,  setShowReport]  = useState(false);
   const [view,        setView]        = useState("output");
   const [historyKey,  setHistoryKey]  = useState(0);
@@ -26,6 +27,7 @@ export default function App() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (error) setError("");
+    if (fieldErrors[name]) setFieldErrors((prev) => ({ ...prev, [name]: "" }));
   }
 
   function handleReuse(record) {
@@ -44,6 +46,7 @@ export default function App() {
       metadata: out.metadata,
     });
     setError("");
+    setFieldErrors({});
     setView("output");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -53,15 +56,19 @@ export default function App() {
     setView("history");
   }
 
-  async function handleSubmit() {
-    setError("");
-    if (!formData.featureTitle.trim() || !formData.featureDescription.trim()) {
-      setError("Feature Title and Description are required.");
-      return;
-    }
+  function validate() {
+    const errs = {};
+    if (!formData.featureTitle.trim())       errs.featureTitle       = "Feature Title is required.";
+    if (!formData.featureDescription.trim()) errs.featureDescription = "Description is required.";
+    setFieldErrors(errs);
+    return Object.keys(errs).length === 0;
+  }
+
+  async function runGenerate() {
+    if (!validate()) return;
 
     setLoading(true);
-    setResult(null);
+    setError("");
     setView("output");
 
     try {
@@ -85,10 +92,19 @@ export default function App() {
         setHistoryKey((k) => k + 1);
       }
     } catch {
-      setError("Could not reach the server. Please try again.");
+      setError("Could not reach the server. Please check your connection and try again.");
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleSubmit() {
+    setResult(null);
+    runGenerate();
+  }
+
+  function handleRegenerate() {
+    runGenerate();
   }
 
   return (
@@ -100,6 +116,7 @@ export default function App() {
         onHistory={goToHistory}
         loading={loading}
         error={error}
+        fieldErrors={fieldErrors}
       />
 
       <main className="main-content">
@@ -123,9 +140,23 @@ export default function App() {
 
           <div className="main-topbar-right">
             {view === "output" && result && (
-              <button className="btn-view-report" onClick={() => setShowReport(true)}>
-                View Full Report
-              </button>
+              <>
+                <button
+                  className="btn-regenerate"
+                  onClick={handleRegenerate}
+                  disabled={loading}
+                  title="Re-run with the same inputs"
+                >
+                  {loading ? (
+                    <span className="btn-spinner" />
+                  ) : (
+                    "↻ Regenerate"
+                  )}
+                </button>
+                <button className="btn-view-report" onClick={() => setShowReport(true)}>
+                  View Full Report
+                </button>
+              </>
             )}
             <div className="avatar">PM</div>
           </div>
@@ -135,6 +166,15 @@ export default function App() {
         {loading && (
           <div className="loading-bar">
             <div className="loading-bar-inner" />
+          </div>
+        )}
+
+        {/* ── API / network error banner ── */}
+        {error && view === "output" && (
+          <div className="error-banner">
+            <span className="error-banner-icon">⚠</span>
+            <span>{error}</span>
+            <button className="error-banner-close" onClick={() => setError("")}>✕</button>
           </div>
         )}
 

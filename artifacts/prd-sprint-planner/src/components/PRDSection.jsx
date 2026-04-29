@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const EMPTY_SECTIONS = [
   { key: "problem",  label: "Problem Statement", hint: "What problem does this feature solve? Who experiences it and how often?" },
   { key: "goals",    label: "Goals",             hint: "What does success look like? Define measurable outcomes." },
@@ -5,6 +7,20 @@ const EMPTY_SECTIONS = [
   { key: "useCases", label: "Use Cases",         hint: "List the primary use cases and user flows this feature enables." },
   { key: "metrics",  label: "Success Metrics",   hint: "How will you measure the impact? Define key metrics and baselines." },
 ];
+
+function prdToText(prd) {
+  if (!prd) return "";
+  if (typeof prd === "string") return prd;
+  const parts = [];
+  if (prd.problem)  parts.push(`Problem Statement\n${prd.problem}`);
+  if (prd.goals)    parts.push(`Goals\n${prd.goals}`);
+  if (prd.personas) parts.push(`Target Users\n${prd.personas}`);
+  if (Array.isArray(prd.useCases) && prd.useCases.length)
+    parts.push(`Use Cases\n${prd.useCases.map((u) => `• ${u}`).join("\n")}`);
+  if (Array.isArray(prd.metrics) && prd.metrics.length)
+    parts.push(`Success Metrics\n${prd.metrics.map((m) => `• ${m}`).join("\n")}`);
+  return parts.join("\n\n");
+}
 
 function TextRow({ label, value }) {
   return (
@@ -41,13 +57,33 @@ function StringPRD({ prd }) {
 }
 
 export default function PRDSection({ prd, summary }) {
-  const hasData = !!prd;
+  const [copied, setCopied] = useState(false);
+
+  const hasData  = !!prd;
   const isString = typeof prd === "string";
+
+  function handleCopy() {
+    const text = prdToText(prd);
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }).catch(() => {});
+  }
 
   return (
     <div className="card card--indigo">
       <div className="card-header">
         <h2 className="card-title">Product Requirements Document</h2>
+        {hasData && (
+          <button className="btn-copy-prd" onClick={handleCopy}>
+            {copied ? (
+              <span className="btn-copy-prd--success">✓ Copied!</span>
+            ) : (
+              "Copy PRD"
+            )}
+          </button>
+        )}
       </div>
       <div className="card-body prd-body">
         {!hasData && (

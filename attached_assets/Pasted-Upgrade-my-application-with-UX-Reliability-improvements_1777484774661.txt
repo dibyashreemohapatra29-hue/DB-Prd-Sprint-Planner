@@ -1,0 +1,90 @@
+Upgrade my application with UX & Reliability improvements (Stage 6).
+
+------------------------------------
+
+GOAL:
+Improve usability, feedback, and robustness across the app.
+
+------------------------------------
+
+ADD THE FOLLOWING FEATURES:
+
+1. Loading State
+- When "Generate Plan" is clicked:
+  - Show loading spinner or progress bar
+  - Disable the button while loading
+- Also apply loading state to Admin Dashboard data fetching
+
+------------------------------------
+
+2. Error Handling
+- Show clear UI error messages for:
+  - API failure
+  - Network failure
+- Example message:
+  "Something went wrong. Please try again."
+- Display error inline (not alert popup)
+
+------------------------------------
+
+3. Input Validation (UI level)
+- Validate before API call:
+  - Title (required)
+  - Description (required)
+- Show inline validation errors
+- Prevent API call if invalid
+
+------------------------------------
+
+4. Regenerate Button
+- Add "Regenerate" button in output section
+- Re-trigger the same API call using last inputs
+- Show loading state again
+
+------------------------------------
+
+5. Copy to Clipboard
+- Add "Copy PRD" button
+- Copies full PRD text to clipboard
+- Show success message:
+  "Copied to clipboard"
+
+------------------------------------
+
+6. Improved Layout / Design
+- Improve spacing, alignment, and readability
+- Add section separation:
+  - Inputs
+  - PRD Output
+  - Tasks
+  - Admin Dashboard
+- Use clean card-based layout
+- Ensure desktop-first responsive design
+
+------------------------------------
+
+7. Empty States
+- If no workflows exist:
+  - Show message:
+    "No workflows yet. Generate your first plan."
+
+------------------------------------
+
+IMPORTANT:
+
+- Do NOT break existing functionality
+- Do NOT remove Admin Dashboard
+- Do NOT change API structure
+- Keep code clean and simple
+- Avoid raw JSON display
+- Ensure everything remains interactive and smooth
+
+------------------------------------
+
+FINAL RESULT SHOULD INCLUDE:
+
+- Loading feedback
+- Clear error handling
+- Input validation
+- Better UI/UX polish
+- Copy + regenerate functionality
