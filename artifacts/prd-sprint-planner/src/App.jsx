@@ -82,6 +82,7 @@ export default function App() {
         setError(data.error || "Something went wrong. Please try again.");
       } else {
         setResult(data);
+        setHistoryKey((k) => k + 1);
       }
     } catch {
       setError("Could not reach the server. Please try again.");

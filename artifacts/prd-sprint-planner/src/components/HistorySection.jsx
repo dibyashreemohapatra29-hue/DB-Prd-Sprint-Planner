@@ -292,7 +292,7 @@ function FilterGroup({ label, value, onChange }) {
   );
 }
 
-export default function HistorySection({ onReuse }) {
+export default function HistorySection({ onReuse, refreshKey = 0 }) {
   const [records,        setRecords]        = useState([]);
   const [loading,        setLoading]        = useState(true);
   const [error,          setError]          = useState("");
@@ -301,6 +301,8 @@ export default function HistorySection({ onReuse }) {
   const [filterRisk,     setFilterRisk]     = useState("All");
 
   useEffect(() => {
+    setLoading(true);
+    setError("");
     fetch("/api/history")
       .then((r) => r.json())
       .then((data) => {
@@ -309,7 +311,7 @@ export default function HistorySection({ onReuse }) {
       })
       .catch(() => setError("Could not load history."))
       .finally(() => setLoading(false));
-  }, []);
+  }, [refreshKey]);
 
   const query = search.trim().toLowerCase();
 
