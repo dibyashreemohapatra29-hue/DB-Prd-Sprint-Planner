@@ -223,10 +223,34 @@ function WorkflowCard({ rec, onReuse }) {
   );
 }
 
+const LEVELS = ["All", "High", "Medium", "Low"];
+
+function FilterGroup({ label, value, onChange }) {
+  return (
+    <div className="adm-filter-group">
+      <span className="adm-filter-label">{label}</span>
+      <div className="adm-filter-pills">
+        {LEVELS.map((lvl) => (
+          <button
+            key={lvl}
+            className={`adm-filter-pill ${value === lvl ? "adm-filter-pill--active" : ""}`}
+            onClick={() => onChange(lvl)}
+          >
+            {lvl}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function HistorySection({ onReuse }) {
-  const [records, setRecords] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState("");
+  const [records,        setRecords]        = useState([]);
+  const [loading,        setLoading]        = useState(true);
+  const [error,          setError]          = useState("");
+  const [search,         setSearch]         = useState("");
+  const [filterPriority, setFilterPriority] = useState("All");
+  const [filterRisk,     setFilterRisk]     = useState("All");
 
   useEffect(() => {
     fetch("/api/history")
@@ -239,19 +263,74 @@ export default function HistorySection({ onReuse }) {
       .finally(() => setLoading(false));
   }, []);
 
+  const query = search.trim().toLowerCase();
+
+  const filtered = records.filter((rec) => {
+    if (query) {
+      const inTitle = (rec.title || "").toLowerCase().includes(query);
+      const inDesc  = (rec.description || "").toLowerCase().includes(query);
+      if (!inTitle && !inDesc) return false;
+    }
+    const meta = rec.output?.metadata || {};
+    if (filterPriority !== "All" && (meta.priority || "").toLowerCase() !== filterPriority.toLowerCase()) return false;
+    if (filterRisk     !== "All" && (meta.risk     || "").toLowerCase() !== filterRisk.toLowerCase())     return false;
+    return true;
+  });
+
+  const hasFilters = query || filterPriority !== "All" || filterRisk !== "All";
+
+  function clearFilters() {
+    setSearch("");
+    setFilterPriority("All");
+    setFilterRisk("All");
+  }
+
   return (
     <section className="adm-dashboard">
+
+      {/* Header */}
       <div className="adm-dashboard-header">
         <div>
           <h2 className="adm-dashboard-title">Workflow History</h2>
           <p className="adm-dashboard-subtitle">
-            {records.length > 0
-              ? `${records.length} workflow${records.length !== 1 ? "s" : ""} — click any card to expand full details`
-              : "All generated workflows appear here"}
+            {loading ? "Loading…"
+              : records.length === 0 ? "All generated workflows appear here"
+              : hasFilters
+                ? `${filtered.length} of ${records.length} workflow${records.length !== 1 ? "s" : ""} match`
+                : `${records.length} workflow${records.length !== 1 ? "s" : ""} — click any card to expand`}
           </p>
         </div>
+        {hasFilters && (
+          <button className="adm-clear-btn" onClick={clearFilters}>
+            Clear filters
+          </button>
+        )}
       </div>
 
+      {/* Search + Filters */}
+      {!loading && !error && records.length > 0 && (
+        <div className="adm-controls">
+          <div className="adm-search-wrap">
+            <span className="adm-search-icon">⌕</span>
+            <input
+              className="adm-search-input"
+              type="text"
+              placeholder="Search by title or description…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            {search && (
+              <button className="adm-search-clear" onClick={() => setSearch("")} aria-label="Clear search">✕</button>
+            )}
+          </div>
+          <div className="adm-filters-row">
+            <FilterGroup label="Priority" value={filterPriority} onChange={setFilterPriority} />
+            <FilterGroup label="Risk"     value={filterRisk}     onChange={setFilterRisk} />
+          </div>
+        </div>
+      )}
+
+      {/* States */}
       {loading && <p className="adm-state-msg">Loading workflows…</p>}
       {error   && <p className="adm-state-msg adm-state-msg--error">{error}</p>}
 
@@ -259,9 +338,14 @@ export default function HistorySection({ onReuse }) {
         <p className="adm-state-msg">No workflows yet. Generate your first plan above.</p>
       )}
 
-      {!loading && !error && records.length > 0 && (
+      {!loading && !error && records.length > 0 && filtered.length === 0 && (
+        <p className="adm-state-msg">No workflows match your search or filters.</p>
+      )}
+
+      {/* Cards */}
+      {!loading && !error && filtered.length > 0 && (
         <div className="adm-cards-list">
-          {records.map((rec, i) => (
+          {filtered.map((rec, i) => (
             <WorkflowCard key={rec.id ?? i} rec={rec} onReuse={onReuse} />
           ))}
         </div>

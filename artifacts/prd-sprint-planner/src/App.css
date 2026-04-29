@@ -1568,3 +1568,142 @@ body {
   background: var(--indigo);
   color: #fff;
 }
+
+/* ── Search & Filter controls ── */
+
+.adm-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Search bar */
+.adm-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.adm-search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 1.05rem;
+  color: var(--t3);
+  pointer-events: none;
+  line-height: 1;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.adm-search-input {
+  width: 100%;
+  padding: 9px 36px 9px 34px;
+  border: 1px solid var(--border);
+  border-radius: var(--r8);
+  background: var(--surface);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  color: var(--t1);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.adm-search-input::placeholder { color: var(--t3); }
+
+.adm-search-input:focus {
+  outline: none;
+  border-color: var(--indigo);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+}
+
+.adm-search-clear {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--t3);
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 2px 4px;
+  line-height: 1;
+  border-radius: 4px;
+  transition: color 0.12s;
+}
+
+.adm-search-clear:hover { color: var(--t1); }
+
+/* Filter rows */
+.adm-filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
+.adm-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adm-filter-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--t3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.adm-filter-pills {
+  display: flex;
+  gap: 4px;
+}
+
+.adm-filter-pill {
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  font-family: var(--font);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--t2);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+
+.adm-filter-pill:hover {
+  border-color: var(--indigo);
+  color: var(--indigo);
+}
+
+.adm-filter-pill--active {
+  background: var(--indigo);
+  border-color: var(--indigo);
+  color: #fff;
+}
+
+/* Clear filters button in header */
+.adm-clear-btn {
+  align-self: flex-start;
+  padding: 5px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--r6);
+  background: var(--surface);
+  font-family: var(--font);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--t2);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.12s, color 0.12s;
+  flex-shrink: 0;
+}
+
+.adm-clear-btn:hover {
+  border-color: var(--indigo);
+  color: var(--indigo);
+}
