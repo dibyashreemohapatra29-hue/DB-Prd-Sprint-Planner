@@ -35,7 +35,7 @@ export default function TaskTable({ items }) {
             {hasData ? (
               items.map((item, i) => (
                 <tr key={i}>
-                  <td style={{ fontWeight: 500, color: "#111827" }}>{item.name}</td>
+                  <td style={{ fontWeight: 500, color: "#111827" }}>{item.task || item.name || "—"}</td>
                   <td><Badge value={item.effort} /></td>
                   <td><Badge value={item.priority} /></td>
                   <td><Badge value={item.risk} /></td>

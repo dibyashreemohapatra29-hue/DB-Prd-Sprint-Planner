@@ -36,7 +36,7 @@ export default function SprintBoard({ items }) {
                   {hasData ? (
                     teamItems.map((item, i) => (
                       <div key={i} className="sprint-card">
-                        <span className="sprint-card-name">{item.name}</span>
+                        <span className="sprint-card-name">{item.task || item.name || "—"}</span>
                         <span className="sprint-card-meta">{item.effort} effort</span>
                       </div>
                     ))

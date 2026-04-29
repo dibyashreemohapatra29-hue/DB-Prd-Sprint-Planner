@@ -58,11 +58,21 @@ export default function FullReport({ result, featureTitle, onClose }) {
             <h3 className="report-section-title report-section-title--indigo">
               <span>📋</span> Product Requirements Document
             </h3>
-            {prd && (
+            {prd && typeof prd === "string" && (
+              <div className="report-prd">
+                <div className="report-prd-row">
+                  <span className="report-prd-label">Full PRD</span>
+                  <div className="report-prd-value" style={{ whiteSpace: "pre-wrap", lineHeight: 1.7 }}>
+                    {prd}
+                  </div>
+                </div>
+              </div>
+            )}
+            {prd && typeof prd === "object" && (
               <div className="report-prd">
                 {[
-                  { label: "Problem Statement", value: prd.problem, type: "text" },
-                  { label: "Goals",             value: prd.goals,   type: "text" },
+                  { label: "Problem Statement", value: prd.problem,  type: "text" },
+                  { label: "Goals",             value: prd.goals,    type: "text" },
                   { label: "Target Users",      value: prd.personas, type: "text" },
                   { label: "Use Cases",         value: prd.useCases, type: "list" },
                   { label: "Success Metrics",   value: prd.metrics,  type: "list" },
@@ -74,7 +84,7 @@ export default function FullReport({ result, featureTitle, onClose }) {
                         <p>{value}</p>
                       ) : (
                         <ul className="report-list">
-                          {(value || []).map((v, i) => <li key={i}>{v}</li>)}
+                          {(Array.isArray(value) ? value : []).map((v, i) => <li key={i}>{v}</li>)}
                         </ul>
                       )}
                     </div>
@@ -113,7 +123,7 @@ export default function FullReport({ result, featureTitle, onClose }) {
                 <tbody>
                   {(items || []).map((item, i) => (
                     <tr key={i}>
-                      <td style={{ fontWeight: 500 }}>{item.name}</td>
+                      <td style={{ fontWeight: 500 }}>{item.task || item.name || "—"}</td>
                       <td><Badge value={item.effort} /></td>
                       <td><Badge value={item.priority} /></td>
                       <td><Badge value={item.risk} /></td>
@@ -142,7 +152,7 @@ export default function FullReport({ result, featureTitle, onClose }) {
                     {buckets[idx].length > 0 ? (
                       buckets[idx].map((item, i) => (
                         <div key={i} className="report-sprint-card">
-                          <span style={{ fontSize: "0.82rem", fontWeight: 500 }}>{item.name}</span>
+                          <span style={{ fontSize: "0.82rem", fontWeight: 500 }}>{item.task || item.name || "—"}</span>
                           <Badge value={item.effort} />
                         </div>
                       ))
