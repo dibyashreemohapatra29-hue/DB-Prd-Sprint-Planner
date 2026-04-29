@@ -1,5 +1,31 @@
 # Changelog
 
+## Stage 7: UX improvements
+**Checkpoint:** `9b4198d87814ae91b0afe63e3a6e88868f34bded`
+
+### Visual design — Studio aesthetic
+- Replaced Inter font with **Fraunces** (serif headings) + **Outfit** (body) from Google Fonts
+- Warm cream/terracotta palette: background `#F9F8F6`, sidebar `#F4F1EC`, accent `#C67C63`
+- Warm border tones (`#E8E4DB`), layered text colors (`#33312E / #5C5852 / #8A857A`)
+- Custom scrollbar: 6px width, `#E0DBD2` thumb, rounded
+
+### Typography
+- Section headings (PRD, Tasks, Sprint Plan, card titles) switched to Fraunces serif
+- Dashboard and history section titles use Fraunces for hierarchy and warmth
+- Sidebar brand title rendered in Fraunces with generous letter-spacing
+
+### Buttons & interactions
+- Generate Plan button: terracotta fill with matching shadow and hover lift
+- Regenerate and Copy PRD buttons: warm `#FDF4F1` hover state
+- All focus rings updated to terracotta `rgba(198,124,99,0.15)` — no more indigo glow
+
+### Tables & cards
+- Table header rows: warm `#F9F8F6` background across task, items, and report tables
+- Table row hover: warm `#FAFAF8` instead of blue-tinted highlight
+- Sprint column bodies: warm beige background
+- Report sprint body: uses sidebar background token for visual consistency
+- Admin stat blocks, PRD text area, and PRD rows: warm background
+
 ## Stage 6: Admin dashboard
 **Checkpoint:** `b5464dd144415b47b0332729ea638a36212d3bc9`
 
