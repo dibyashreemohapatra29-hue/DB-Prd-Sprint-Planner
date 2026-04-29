@@ -1092,3 +1092,428 @@ body {
   background: var(--indigo);
   color: #fff;
 }
+
+/* ─── Admin Dashboard ────────────────────── */
+.adm-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.adm-dashboard-header {
+  padding: 4px 0 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.adm-dashboard-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--t1);
+  letter-spacing: -0.2px;
+}
+
+.adm-dashboard-subtitle {
+  font-size: 0.72rem;
+  color: var(--t3);
+  margin-top: 3px;
+}
+
+.adm-state-msg {
+  font-size: 0.82rem;
+  color: var(--t3);
+  font-style: italic;
+  padding: 12px 0;
+}
+
+.adm-state-msg--error { color: #dc2626; font-style: normal; }
+
+.adm-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Card shell ── */
+.adm-card {
+  border: 1px solid var(--border);
+  border-radius: var(--r12);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.adm-card--open {
+  border-color: #c7d2fe;
+  box-shadow: 0 2px 12px rgba(99,102,241,.1);
+}
+
+/* ── Card header (collapsed trigger) ── */
+.adm-card-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font);
+  transition: background 0.1s;
+}
+
+.adm-card-header:hover { background: #f7f8ff; }
+
+.adm-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.adm-card-chevron {
+  font-size: 0.75rem;
+  color: var(--indigo);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.adm-card-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--t1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adm-card-date {
+  font-size: 0.7rem;
+  color: var(--t3);
+  margin-top: 2px;
+}
+
+.adm-card-header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ── Badges ── */
+.adm-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.adm-badge--sm { font-size: 0.62rem; padding: 1px 6px; }
+
+.adm-badge--priority-high   { background: #fee2e2; color: #dc2626; }
+.adm-badge--priority-medium,
+.adm-badge--priority-med    { background: #fef3c7; color: #d97706; }
+.adm-badge--priority-low    { background: #dcfce7; color: #16a34a; }
+
+.adm-badge--risk-high   { background: #fee2e2; color: #dc2626; }
+.adm-badge--risk-medium,
+.adm-badge--risk-med    { background: #fef3c7; color: #d97706; }
+.adm-badge--risk-low    { background: #dcfce7; color: #16a34a; }
+
+.adm-badge--effort-high { background: #ede9fe; color: #7c3aed; }
+.adm-badge--effort-med  { background: #e0f2fe; color: #0369a1; }
+.adm-badge--effort-low  { background: #f0fdf4; color: #15803d; }
+
+/* ── Expanded body ── */
+.adm-card-body {
+  border-top: 1px solid var(--border-light);
+  padding: 20px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Section blocks ── */
+.adm-section {}
+
+.adm-section-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--indigo);
+  margin-bottom: 10px;
+}
+
+/* ── Inputs grid ── */
+.adm-inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.adm-input-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: #f9fafb;
+  border: 1px solid var(--border-light);
+  border-radius: var(--r8);
+  padding: 10px 12px;
+}
+
+.adm-input-field--full { grid-column: 1 / -1; }
+
+.adm-input-key {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--t3);
+}
+
+.adm-input-val {
+  font-size: 0.82rem;
+  color: var(--t1);
+  line-height: 1.5;
+}
+
+/* ── Logic layer ── */
+.adm-logic-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.adm-logic-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: #f9fafb;
+  border: 1px solid var(--border-light);
+  border-radius: var(--r8);
+  padding: 10px 18px;
+  min-width: 80px;
+}
+
+.adm-logic-num {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--indigo);
+  line-height: 1.2;
+}
+
+.adm-logic-desc {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--t3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Items table ── */
+.adm-items-table-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--r8);
+  overflow: hidden;
+}
+
+.adm-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.adm-items-table thead tr { background: #f9fafb; }
+
+.adm-items-table th {
+  text-align: left;
+  padding: 8px 14px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--t3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.adm-items-table tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.1s;
+}
+
+.adm-items-table tbody tr:last-child { border-bottom: none; }
+.adm-items-table tbody tr:hover { background: #fafbff; }
+
+.adm-items-table td {
+  padding: 10px 14px;
+  color: var(--t2);
+  vertical-align: middle;
+}
+
+/* ── PRD content ── */
+.adm-prd-empty {
+  font-size: 0.82rem;
+  color: var(--t3);
+  font-style: italic;
+}
+
+.adm-prd-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #f9fafb;
+  border: 1px solid var(--border-light);
+  border-radius: var(--r8);
+  padding: 16px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.adm-prd-heading {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--indigo);
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+.adm-prd-bold {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--t1);
+  line-height: 1.5;
+}
+
+.adm-prd-bullet {
+  font-size: 0.82rem;
+  color: var(--t2);
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.55;
+}
+
+.adm-prd-bullet::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--indigo);
+  font-weight: 700;
+  font-size: 0.72rem;
+  top: 1px;
+}
+
+.adm-prd-para {
+  font-size: 0.82rem;
+  color: var(--t2);
+  line-height: 1.6;
+}
+
+.adm-prd-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: #f9fafb;
+  border: 1px solid var(--border-light);
+  border-radius: var(--r8);
+  overflow: hidden;
+}
+
+.adm-prd-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.adm-prd-row:last-child { border-bottom: none; }
+
+.adm-prd-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--indigo);
+  min-width: 130px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.adm-prd-value {
+  font-size: 0.82rem;
+  color: var(--t2);
+  line-height: 1.55;
+  flex: 1;
+}
+
+/* ── Insights ── */
+.adm-insights-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.adm-insights-list li {
+  font-size: 0.82rem;
+  color: var(--t2);
+  padding: 8px 12px 8px 24px;
+  position: relative;
+  background: #f5f7ff;
+  border: 1px solid #e0e7ff;
+  border-radius: var(--r6);
+  line-height: 1.5;
+}
+
+.adm-insights-list li::before {
+  content: "·";
+  position: absolute;
+  left: 10px;
+  color: var(--indigo);
+  font-weight: 700;
+  font-size: 1rem;
+  top: 6px;
+}
+
+/* ── Card footer ── */
+.adm-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0 18px;
+  border-top: 1px solid var(--border-light);
+  margin-top: 4px;
+}
+
+.adm-card-footer-date {
+  font-size: 0.72rem;
+  color: var(--t3);
+}
+
+.adm-reuse-btn {
+  padding: 7px 18px;
+  background: var(--surface);
+  color: var(--indigo);
+  border: 1.5px solid var(--indigo);
+  border-radius: var(--r6);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: background 0.15s, color 0.15s;
+}
+
+.adm-reuse-btn:hover {
+  background: var(--indigo);
+  color: #fff;
+}
