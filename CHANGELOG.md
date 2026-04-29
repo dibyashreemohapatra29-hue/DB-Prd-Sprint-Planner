@@ -1,5 +1,30 @@
 # Changelog
 
+## Stage 6: Admin dashboard
+**Checkpoint:** `b5464dd144415b47b0332729ea638a36212d3bc9`
+
+### Navigation
+- Replaced single-page layout with tabbed navigation: **Output** and **History** tabs in the topbar
+- History section moved to its own dedicated page — Output view is now clean and uncluttered
+- "View History" sidebar button navigates directly to the History tab
+
+### Workflow History dashboard
+- Expandable workflow cards showing inputs, logic layer stats (tasks, insights, priority, risk, effort), full PRD, and insights
+- **Reuse** button pre-fills the form and switches back to the Output tab instantly
+- Auto-refresh: history re-fetches from `/api/history` after every successful plan generation
+
+### Search & filter
+- Search bar filters cards in real-time by title or description
+- Priority filter pills: All / High / Medium / Low
+- Risk filter pills: All / High / Medium / Low
+- Filters compose together; subtitle shows match count; "Clear filters" button resets all
+
+### Delete
+- `DELETE /api/workflow/:id` endpoint — removes record from Supabase by id
+- Each card has a `✕` delete button with an inline **"Delete? Yes / No"** confirmation
+- Confirmed delete removes the card from the UI immediately with no page reload
+- `GET /api/history` updated to include `id` field in the response
+
 ## Stage 4: Database integration
 **Checkpoint:** `a61c328d5eb39b1817f0f31bcbd6abf3209f1ef5`
 
