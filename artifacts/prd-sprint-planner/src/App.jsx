@@ -4,7 +4,6 @@ import PRDSection from "./components/PRDSection";
 import TaskTable from "./components/TaskTable";
 import SprintBoard from "./components/SprintBoard";
 import FullReport from "./components/FullReport";
-import HistoryPanel from "./components/HistoryPanel";
 import HistorySection from "./components/HistorySection";
 import "./App.css";
 
@@ -16,11 +15,12 @@ export default function App() {
     businessGoal: "",
   });
 
-  const [result, setResult]         = useState(null);
-  const [loading, setLoading]       = useState(false);
-  const [error, setError]           = useState("");
-  const [showReport, setShowReport] = useState(false);
-  const [showHistory, setShowHistory] = useState(false);
+  const [result,      setResult]      = useState(null);
+  const [loading,     setLoading]     = useState(false);
+  const [error,       setError]       = useState("");
+  const [showReport,  setShowReport]  = useState(false);
+  const [view,        setView]        = useState("output");
+  const [historyKey,  setHistoryKey]  = useState(0);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -28,7 +28,6 @@ export default function App() {
     if (error) setError("");
   }
 
-  // Pre-fill form from a history record (supports both local DB and Supabase field names)
   function handleReuse(record) {
     setFormData({
       featureTitle:       record.title        ?? record.featureTitle ?? "",
@@ -45,7 +44,13 @@ export default function App() {
       metadata: out.metadata,
     });
     setError("");
+    setView("output");
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function goToHistory() {
+    setHistoryKey((k) => k + 1);
+    setView("history");
   }
 
   async function handleSubmit() {
@@ -57,6 +62,7 @@ export default function App() {
 
     setLoading(true);
     setResult(null);
+    setView("output");
 
     try {
       const res = await fetch(`/api/generate`, {
@@ -90,23 +96,32 @@ export default function App() {
         formData={formData}
         onChange={handleChange}
         onSubmit={handleSubmit}
-        onHistory={() => setShowHistory(true)}
+        onHistory={goToHistory}
         loading={loading}
         error={error}
       />
 
       <main className="main-content">
+
+        {/* ── Top bar with nav tabs ── */}
         <div className="main-topbar">
-          <div>
-            <h1 className="main-title">Output</h1>
-            {result && (
-              <p className="main-subtitle">
-                Generated plan for <strong>{formData.featureTitle}</strong>
-              </p>
-            )}
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            {result && (
+          <nav className="main-tabs">
+            <button
+              className={`main-tab ${view === "output" ? "main-tab--active" : ""}`}
+              onClick={() => setView("output")}
+            >
+              Output
+            </button>
+            <button
+              className={`main-tab ${view === "history" ? "main-tab--active" : ""}`}
+              onClick={goToHistory}
+            >
+              History
+            </button>
+          </nav>
+
+          <div className="main-topbar-right">
+            {view === "output" && result && (
               <button className="btn-view-report" onClick={() => setShowReport(true)}>
                 View Full Report
               </button>
@@ -115,18 +130,34 @@ export default function App() {
           </div>
         </div>
 
+        {/* ── Loading bar ── */}
         {loading && (
           <div className="loading-bar">
             <div className="loading-bar-inner" />
           </div>
         )}
 
-        <div className="output-scroll">
-          <PRDSection prd={result?.prd} summary={result?.summary} />
-          <TaskTable items={result?.items} />
-          <SprintBoard items={result?.items} />
-          <HistorySection onReuse={handleReuse} />
-        </div>
+        {/* ── Output view ── */}
+        {view === "output" && (
+          <div className="output-scroll">
+            {result && (
+              <p className="output-context-label">
+                Generated plan for <strong>{formData.featureTitle}</strong>
+              </p>
+            )}
+            <PRDSection prd={result?.prd} summary={result?.summary} />
+            <TaskTable items={result?.items} />
+            <SprintBoard items={result?.items} />
+          </div>
+        )}
+
+        {/* ── History view ── */}
+        {view === "history" && (
+          <div className="output-scroll">
+            <HistorySection key={historyKey} onReuse={handleReuse} />
+          </div>
+        )}
+
       </main>
 
       {showReport && result && (
@@ -134,13 +165,6 @@ export default function App() {
           result={result}
           featureTitle={formData.featureTitle}
           onClose={() => setShowReport(false)}
-        />
-      )}
-
-      {showHistory && (
-        <HistoryPanel
-          onReuse={handleReuse}
-          onClose={() => setShowHistory(false)}
         />
       )}
     </div>
